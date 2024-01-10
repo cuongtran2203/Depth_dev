@@ -4,7 +4,7 @@ import numpy as np
 from ultralytics import YOLO
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-
+import open3d as o3d
 if __name__=="__main__":
 
 
@@ -18,6 +18,8 @@ if __name__=="__main__":
         object_img=img[box[1]:box[3],box[0]:box[2]]
         print(box)
         depth_map,output_points=model_depth.inference(object_img)
+        
+        cv2.imwrite("depth_map.png",depth_map)
         print(output_points)
         x,y,z=zip(*output_points)
         # Tính toán giới hạn của tất cả các tọa độ
@@ -27,6 +29,15 @@ if __name__=="__main__":
         # Tạo subplot 3D
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
+        #  # Sử dụng RANSAC để ước lượng mô hình mặt phẳng
+        # plane_model, inliers = o3d.geometry.plane_from_points(output_points, distance_threshold=0.01, ransac_n=3, num_iterations=1000)
+        
+        # # Xác định hướng và vị trí từ mô hình mặt phẳng
+        # normal_vector = plane_model[0:3]
+        # distance_to_origin = plane_model[3]
+        
+        # print("Estimated Normal Vector:", normal_vector)
+        # print("Estimated Distance to Origin:", distance_to_origin)
 
         # Vẽ điểm 3D trên đồ thị
         ax.scatter(x, y, z, c='r', marker='o')

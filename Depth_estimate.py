@@ -55,8 +55,11 @@ class Depth_Estimation():
             points_3D = cv2.reprojectImageTo3D(depth_map, self.Q, handleMissingValues=False)
 
 
+            
+
+
             #Get rid of points with value 0 (i.e no depth)
-            mask_map = depth_map > 0.4
+            mask_map = depth_map > 0.45
 
             #Mask colors and points. 
             output_points = points_3D[mask_map]
